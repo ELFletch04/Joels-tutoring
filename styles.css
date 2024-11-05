@@ -18,7 +18,7 @@ header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 20px;
+    padding: 10px; /* Reduced padding */
     background-color: #007BFF;
     position: sticky;
     top: 0;
@@ -27,12 +27,12 @@ header {
 }
 
 .header-title {
-    font-size: 40px;
+    font-size: 30px;
     color: #fff;
     font-weight: 300;
     letter-spacing: 1px;
     text-align: center;
-    margin: 20px 0;
+    margin: 10px 0; /* Reduced margin */
 }
 
 nav ul {
