@@ -108,65 +108,92 @@
         
         <section id="contact" class="section-content">
             <h2 class="slide-in">Contact Me</h2>
-            <form action="https://formspree.io/f/movqdqdl" method="POST" id="bookingForm" style="max-width: 500px; margin: auto;">
+            <form action="https://formspree.io/f/xdkogodr" method="POST" id="bookingForm" style="max-width: 500px; margin: auto;">
                 <label style="display: block; margin-bottom: 5px;">Your name:</label>
                 <input type="text" name="name" required style="width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px;">
-                
+        
                 <label style="display: block; margin-bottom: 5px;">Your email:</label>
                 <input type="email" name="email" required style="width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px;">
-                
+        
                 <label style="display: block; margin-bottom: 5px;">Your message:</label>
                 <textarea name="message" required style="width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px; resize: none;"></textarea>
-                
-                <label style="display: block; margin-bottom: 5px;">Choose a date for your booking:</label>
-                <input type="date" id="bookingDate" name="booking_date" required style="width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px;">
-                
-                <label style="display: block; margin-bottom: 5px;">Choose a time for your booking:</label>
-                <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-                  <select id="bookingHour" name="booking_hour" required style="flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px;">
-                    <option value="" disabled selected>Hour</option>
-                    <script>
-                      for (let i = 8; i <= 20; i++) {
-                        document.write(`<option value="${i}">${i}:00</option>`);
-                      }
-                    </script>
-                  </select>
-                  
-                  <select id="bookingMinute" name="booking_minute" required style="flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px;">
-                    <option value="" disabled selected>Minute</option>
-                    <option value="00">00</option>
-                    <option value="15">15</option>
-                    <option value="30">30</option>
-                    <option value="45">45</option>
-                  </select>
+        
+                <label style="display: block; margin-bottom: 5px;">
+                    <input type="checkbox" id="bookingRequestCheckbox" style="margin-right: 10px;"> I would like to request a booking
+                </label>
+        
+                <div id="bookingFields" style="display: none;">
+                    <label style="display: block; margin-bottom: 5px;">Choose a date for your booking:</label>
+                    <input type="date" id="bookingDate" name="booking_date" style="width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px;">
+        
+                    <label style="display: block; margin-bottom: 5px;">Choose a time for your booking:</label>
+                    <select id="bookingTime" name="booking_time" style="width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px;">
+                        <option value="" disabled selected>Select time</option>
+                        <script>
+                            for (let i = 8; i <= 20; i++) {
+                                for (let j = 0; j < 60; j += 15) {
+                                    const hour = i < 10 ? '0' + i : i; // Format hour to be two digits
+                                    const minute = j < 10 ? '0' + j : j; // Format minute to be two digits
+                                    document.write(`<option value="${hour}:${minute}">${hour}:${minute}</option>`);
+                                }
+                            }
+                        </script>
+                    </select>
+        
+                    <label style="display: block; margin-bottom: 5px;">Choose length of session:</label>
+                    <select id="sessionLength" name="session_length_hours" required style="width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px;">
+                        <option value="" disabled selected>Select session length</option>
+                        <option value="1">1 hour</option>
+                        <option value="2">2 hours</option>
+                    </select>
                 </div>
-              
+        
                 <button type="submit" style="padding: 10px 20px; background-color: #28a745; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer;">Send</button>
-              </form>
-              
-              
-              
-              
-              
-              <script>
+            </form>
+        
+            <script>
+                // Show or hide booking fields based on checkbox
+                document.getElementById('bookingRequestCheckbox').addEventListener('change', function() {
+                    const bookingFields = document.getElementById('bookingFields');
+                    const bookingTime = document.getElementById('bookingTime');
+                    const bookingDate = document.getElementById('bookingDate');
+        
+                    // If checkbox is unchecked, reset time and date fields
+                    if (!this.checked) {
+                        bookingTime.value = ""; // Reset time
+                        bookingDate.value = ""; // Reset date
+                    }
+        
+                    bookingFields.style.display = this.checked ? 'block' : 'none';
+                });
+        
+                // Handle form submission
                 document.getElementById('bookingForm').addEventListener('submit', function(event) {
-    event.preventDefault(); // Prevent form submission for handling
-
-    const date = document.getElementById('bookingDate').value;
-    const hour = document.getElementById('bookingHour').value;
-    const minute = document.getElementById('bookingMinute').value;
-
-    if (date && hour && minute) {
-        const bookingTime = new Date(`${date}T${hour}:${minute}`);
-        console.log('Booking time:', bookingTime); // Use this value as needed
-    }
-
-    // Now submit the form if you need to continue with Formspree
-    this.submit();
-});
-
-                </script>
+                    event.preventDefault(); // Prevent form submission for handling
+        
+                    // If the checkbox is checked, validate date and time
+                    if (document.getElementById('bookingRequestCheckbox').checked) {
+                        const date = document.getElementById('bookingDate').value;
+                        const time = document.getElementById('bookingTime').value;
+        
+                        // Ensure that booking details are valid if checkbox is checked
+                        if (!date || !time) {
+                            alert('Please fill in the date and time for your booking.');
+                            return; // Prevent form submission
+                        }
+                    }
+        
+                    // Submit the form if validation passes
+                    this.submit();
+                });
+            </script>
         </section>
+        
+        
+        
+        
+        
+        
         
     </main>
 
